@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Paymaster Management Solution Ltd." />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Paymaster Management Solution Ltd." />
+    <meta
+      property="og:description"
+      content="Paymaster Management Solution Ltd. offers an advanced HR management solution."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sameer-yadav.site" />
+    <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- Preconnect -->
+    <link
+      rel="preconnect"
+      href="https://paymaster-document.s3.ap-south-1.amazonaws.com"
+    />
+    <link rel="preconnect" href="https://sameer-yadav.online" />
+    <link rel="preconnect" href="https://webchat.botpress.cloud" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://cdn.botpress.cloud" />
+    <!-- Preload essential resources -->
+    <link rel="preload" href="/assets/images/login-bg.webp" as="image" />
+    <link rel="preload" href="/assets/images/login.webp" as="image" />
+    <link rel="preload" href="/assets/images/personal.webp" as="image" />
+    <link rel="preload" href="/assets/images/sidebar-bg.webp" as="image" />
+    <link
+      rel="preload"
+      href="https://cdn.botpress.cloud/webchat/v2.2/inject.js"
+      as="script"
+    />
+    <!-- Content Security Policy -->
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      default-src 'self' 
+        https://localhost:3000 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site;
+      script-src 'self' 'unsafe-inline' 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site
+        https://www.gstatic.com; 
+      connect-src 'self' 
+        https://sameer-yadav.site 
+        https://localhost:9002 
+        ws://localhost:9002 
+        https://sameer-yadav.online 
+        wss://sameer-yadav.online 
+        https://firebase.googleapis.com 
+        https://firebaseinstallations.googleapis.com
+        https://fcmregistrations.googleapis.com; 
+      style-src 'self' 'unsafe-inline' 
+        https://cdn.jsdelivr.net/npm/primereact 
+        https://fonts.googleapis.com 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site;
+      font-src 'self' 
+        https://fonts.gstatic.com 
+        data: 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site;
+      img-src 'self' data: 
+        https://paymaster-document.s3.ap-south-1.amazonaws.com/ 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site;
+      object-src 'self' 
+        https://paymaster-document.s3.ap-south-1.amazonaws.com/ 
+        https://sameer-yadav.online 
+        https://sameer-yadav.site;
+    "
+    /> -->
+    <!-- HSTS -->
+    <meta
+      http-equiv="Strict-Transport-Security"
+      content="max-age=31536000; includeSubDomains; preload"
+    />
+    <!-- X-Content-Type-Options -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <!-- Referrer-Policy -->
+    <meta name="referrer" content="no-referrer" />
+    <!-- Permissions -->
+    <meta
+      http-equiv="Permissions-Policy"
+      content="
+      geolocation=(self), 
+      microphone=(), 
+      fullscreen=(self),
+      notifications=(self),
+      interest-cohort=(),
+      payment=()
+  "
+    />
+    <!-- Cross-Origin-Embedder-Policy -->
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+    <!-- Cross-Origin-Resource-Policy -->
+    <meta http-equiv="Cross-Origin-Resource-Policy" content="same-origin" />
+    <!-- Cross-Origin-Opener-Policy -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <!-- Cache-Control -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-store, no-cache, must-revalidate, max-age=0"
+    />
+
+    <title>Paymaster Management Solution Ltd.</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then((reg) => {})
+            .catch((err) => {});
+        });
+      }
+    </script>
+  </body>
+</html>

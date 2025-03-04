@@ -1,0 +1,99 @@
+@import url("./constants.scss");
+
+.dashboard {
+  padding-bottom: 20px;
+  .dashboard-container {
+    margin: 5px 0;
+    max-height: 500px;
+    height: 100%;
+    overflow: auto;
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--card-background);
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-repeat: no-repeat !important;
+    background-position: right !important;
+    padding: 0 25px;
+    cursor: pointer;
+
+    p {
+      color: var(--text-color);
+      font-size: 20px;
+    }
+    h1 {
+      color: #ffb101;
+      font-weight: 800;
+      font-size: 22px;
+    }
+  }
+
+  .dashboard-container h2 {
+    font-size: 20px;
+    color: var(--text-color);
+  }
+
+  .attendance-row-1,
+  .attendance-row-2 span {
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  .attendance-row-1 span {
+    &.working-days {
+      color: #6c5efc;
+    }
+
+    &.presents {
+      color: #1f6557;
+    }
+
+    &.leaves {
+      color: #418145;
+    }
+  }
+
+  .attendance-row-2 span {
+    &.paid-leaves {
+      color: #9746ff;
+    }
+
+    &.unpaid-leaves {
+      color: #2274ae;
+    }
+
+    &.week-offs {
+      color: #ff3a29;
+    }
+  }
+
+  .attendance-row p {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .notification-container {
+    background-color: var(--card-background-secondary);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    span {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}

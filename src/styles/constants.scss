@@ -1,0 +1,34 @@
+:root {
+  --box-shadow: 2px 2px 50px 10px rgba(0, 0, 0, 0.05);
+  --btn-color: #fff;
+}
+
+#light {
+  --card-background: #fff;
+  --card-background-secondary: #efefef;
+  --event-strip-bg: #f9fafb;
+  --notes-bg: #fff;
+  --notes-color: #130d6b;
+  --keys-color: #0a5faf;
+  --text-color: #000;
+  --link-color: #0060ae;
+  --btn-bg: #111b21;
+  --notes-box-shadow: inset 0 -40px 40px rgba(80, 79, 79, 0.2),
+    inset 0 25px 10px rgba(174, 172, 172, 0.2),
+    0 5px 6px 5px rgba(73, 66, 66, 0.2);
+}
+
+#dark {
+  --card-background: #212e35;
+  --card-background-secondary: #141d23;
+  --event-strip-bg: #111b21;
+  --notes-bg: #212e35;
+  --notes-color: #a5a9ab;
+  --keys-color: #a5a9ab;
+  --text-color: #a5a9ab;
+  --link-color: #88d0fa;
+  --btn-bg: #0c3f61;
+  --notes-box-shadow: inset 0 -40px 40px rgba(3, 3, 3, 0.2),
+    inset 0 25px 10px rgba(0, 0, 0, 0.2), 0 5px 6px 5px rgba(0, 0, 0, 0.2);
+  color: #888585;
+}
