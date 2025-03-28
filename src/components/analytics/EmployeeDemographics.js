@@ -5,6 +5,8 @@ import EmployeeDepartments from "./EmployeeDepartments";
 import EmployeeDesignations from "./EmployeeDesignations";
 import AgeDistribution from "./AgeDistribution";
 import JoiningInfo from "./JoiningInfo";
+import ErrorFallback from "../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 import "../../styles/dashboard.scss";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
@@ -14,22 +16,30 @@ function EmployeeDemographics() {
     <Box sx={{ flexGrow: 1, paddingTop: 0 }} className="dashboard">
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <EmployeeDepartments theme={theme} />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <EmployeeDepartments theme={theme} />
+          </ErrorBoundary>
         </Grid>
         <Grid size={6}>
-          <AgeDistribution theme={theme} />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <AgeDistribution theme={theme} />
+          </ErrorBoundary>
         </Grid>
       </Grid>
 
       <Grid container>
         <Grid size={{ xs: 12, md: 12 }}>
-          <EmployeeDesignations theme={theme} />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <EmployeeDesignations theme={theme} />
+          </ErrorBoundary>
         </Grid>
       </Grid>
 
       <Grid container>
         <Grid size={{ xs: 12, md: 12 }}>
-          <JoiningInfo theme={theme} />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <JoiningInfo theme={theme} />
+          </ErrorBoundary>
         </Grid>
       </Grid>
     </Box>

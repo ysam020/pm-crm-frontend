@@ -25,6 +25,7 @@ function HiringModal(props) {
         aadharNo: props.aadharNo,
         jobTitle: props.jobTitle,
         email: props.email,
+        _id: props._id,
       };
 
       try {

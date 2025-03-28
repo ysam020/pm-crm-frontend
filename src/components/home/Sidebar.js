@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/sidebar.scss";
 import { Avatar, IconButton, ListItemButton, Tooltip } from "@mui/material";
@@ -18,27 +18,30 @@ function Sidebar(props) {
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
   const { toggleTheme } = useContext(ThemeContext);
+
   const handleNavigation = (path) => {
     navigate(path);
   };
 
-  const navItems = [
-    { title: "Dashboard", icon: <SpaceDashboardIcon />, path: "/" },
-    { title: "Calendar", icon: <CalendarMonthIcon />, path: "/calendar" },
-    { title: "Modules", icon: <ViewModuleIcon />, path: "/modules" },
-    // Conditionally render "Assign Module" based on user.rank
-    ...(user.rank <= 2
-      ? [
-          {
-            title: "Assign Module",
-            icon: <AssignmentIndIcon />,
-            path: "/assign",
-          },
-        ]
-      : []),
-    { title: "Analytics", icon: <EqualizerIcon />, path: "/analytics" },
-    { title: "Help", icon: <LiveHelpIcon />, path: "/help" },
-  ];
+  // Memoized navItems array
+  const navItems = useMemo(() => {
+    return [
+      { title: "Dashboard", icon: <SpaceDashboardIcon />, path: "/" },
+      { title: "Calendar", icon: <CalendarMonthIcon />, path: "/calendar" },
+      { title: "Modules", icon: <ViewModuleIcon />, path: "/modules" },
+      ...(user.rank <= 2
+        ? [
+            {
+              title: "Assign Module",
+              icon: <AssignmentIndIcon />,
+              path: "/assign",
+            },
+          ]
+        : []),
+      { title: "Analytics", icon: <EqualizerIcon />, path: "/analytics" },
+      { title: "Help", icon: <LiveHelpIcon />, path: "/help" },
+    ];
+  }, [user.rank]); // Recalculate only when user.rank changes
 
   return (
     <div className="sidebar">

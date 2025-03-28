@@ -8,6 +8,7 @@ export async function enableTwoFactor(
 ) {
   try {
     const res = await apiClient(`/enable-two-factor`);
+
     setQr(res.data.qrCodeImage);
     setIsTwoFactorEnabled(true);
     setUser({

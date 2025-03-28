@@ -18,7 +18,6 @@ const useUserVerification = (setUser) => {
           navigate("/");
         }
       } catch (error) {
-        console.error("Failed to fetch user:", error);
         setUser(null);
         navigate("/");
       } finally {

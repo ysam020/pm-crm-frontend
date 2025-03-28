@@ -77,7 +77,6 @@ function AppraisalForm() {
         formik={formik}
       />
       <br />
-      <br />
       Performance Score
       <br />
       <Rating

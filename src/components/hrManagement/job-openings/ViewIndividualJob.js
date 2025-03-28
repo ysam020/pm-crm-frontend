@@ -14,6 +14,8 @@ import useTableConfig from "../../../hooks/useTableConfig";
 import apiClient from "../../../config/axiosConfig";
 import HiringModal from "./HiringModal";
 import RejectModal from "./RejectModal";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewIndividualJob() {
   const { _id } = useParams();
@@ -166,11 +168,11 @@ function ViewIndividualJob() {
     {
       accessorKey: "action",
       header: "Action",
-      size: 100,
+      size: 120,
       Cell: ({ cell }) => (
         <>
           <span
-            className="link"
+            className="link approve-link"
             onClick={() =>
               handleOpenHiringModal(
                 cell.row.original.aadharNo,
@@ -178,10 +180,10 @@ function ViewIndividualJob() {
               )
             }
           >
-            Hire&nbsp;|&nbsp;
+            Hire
           </span>
           <span
-            className="link"
+            className="link reject-link"
             onClick={() =>
               handleOpenRejectModal(cell.row.original.aadharNo, data.jobTitle)
             }
@@ -272,33 +274,44 @@ function ViewIndividualJob() {
         <br />
         <h3>Applications</h3>
         <br />
-        <MaterialReactTable table={table} />
+        <ErrorBoundary fallback={<ErrorFallback />}>
+          <MaterialReactTable table={table} />
+        </ErrorBoundary>
       </div>
 
-      <ScheduleInterviewModal
-        open={openInterviewModal}
-        handleClose={handleCloseInterviewModal}
-        jobTitle={data?.jobTitle}
-        name={name}
-        email={email}
-      />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <ScheduleInterviewModal
+          open={openInterviewModal}
+          handleClose={handleCloseInterviewModal}
+          jobTitle={data?.jobTitle}
+          name={name}
+          email={email}
+          _id={_id}
+        />
+      </ErrorBoundary>
 
-      <HiringModal
-        open={openHiringModal}
-        handleClose={handleCloseHiringModal}
-        jobTitle={data?.jobTitle}
-        aadharNo={aadharNo}
-        getJobApplications={getJobApplications}
-        email={email}
-      />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <HiringModal
+          open={openHiringModal}
+          handleClose={handleCloseHiringModal}
+          jobTitle={data?.jobTitle}
+          aadharNo={aadharNo}
+          getJobApplications={getJobApplications}
+          email={email}
+          _id={_id}
+        />
+      </ErrorBoundary>
 
-      <RejectModal
-        open={openRejectModal}
-        handleClose={handleCloseRejectModal}
-        jobTitle={data?.jobTitle}
-        aadharNo={aadharNo}
-        getJobApplications={getJobApplications}
-      />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <RejectModal
+          open={openRejectModal}
+          handleClose={handleCloseRejectModal}
+          jobTitle={data?.jobTitle}
+          aadharNo={aadharNo}
+          getJobApplications={getJobApplications}
+          _id={_id}
+        />
+      </ErrorBoundary>
     </Grid>
   );
 }

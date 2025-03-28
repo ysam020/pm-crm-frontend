@@ -1,23 +1,51 @@
-import React from "react";
+import React, { useState, useContext, useMemo } from "react";
 import AppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Tooltip } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Popover, Box } from "@mui/material";
+import Notifications from "../dashboard/Notifications";
+import Badge from "@mui/material/Badge";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const drawerWidth = 60;
 
-function AppbarComponent(props) {
+function AppbarComponent({ showSidebar, setMobileOpen, mobileOpen }) {
   const navigate = useNavigate();
+  const { notifications } = useContext(NotificationContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleNotificationClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  // Memoize the popover ID to avoid unnecessary recalculations
+  const popoverId = useMemo(
+    () => (open ? "notification-popover" : undefined),
+    [open]
+  );
+
+  // Memoize the badge count to prevent unnecessary re-renders
+  const notificationCount = useMemo(
+    () => notifications?.length || 0,
+    [notifications]
+  );
 
   return (
     <AppBar
       position="fixed"
       sx={{
         width: {
-          lg: props.showSidebar ? `calc(100% - ${drawerWidth}px)` : "100%",
+          lg: showSidebar ? `calc(100% - ${drawerWidth}px)` : "100%",
         },
         ml: { lg: `${drawerWidth}px` },
         backgroundColor: "transparent",
@@ -30,7 +58,7 @@ function AppbarComponent(props) {
         <IconButton
           aria-label="open drawer"
           edge="start"
-          onClick={() => props.setMobileOpen(!props.mobileOpen)}
+          onClick={() => setMobileOpen(!mobileOpen)}
           sx={{ mr: 2, display: { lg: "none" } }}
         >
           <MenuIcon />
@@ -56,22 +84,35 @@ function AppbarComponent(props) {
               style={{ cursor: "pointer", width: "120px", height: "60px" }}
             />
           </div>
-          <Tooltip title="Show/Hide Sidebar">
-            <IconButton
-              aria-label="sidebar"
-              edge="start"
-              onClick={() => props.setShowSidebar(!props.showSidebar)}
-              sx={{
-                height: "50px",
-                width: "50px",
-                display: { sm: "none", lg: "block" },
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Tooltip>
+
+          <Badge badgeContent={notificationCount} color="error">
+            <NotificationsIcon
+              onClick={handleNotificationClick}
+              sx={{ cursor: "pointer" }}
+            />
+          </Badge>
         </div>
       </Toolbar>
+
+      <Popover
+        id={popoverId}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        container={document.querySelector(".App")}
+      >
+        <Box sx={{ p: 0, minWidth: 250, maxWidth: 400 }}>
+          <Notifications />
+        </Box>
+      </Popover>
     </AppBar>
   );
 }

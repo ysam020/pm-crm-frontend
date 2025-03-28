@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[4470],{4470:(e,s,a)=>{a.d(s,{sendEmail:()=>c});var r=a(3785);const c=async e=>{try{e({open:!0,message:(await(0,r.A)("/send-backup-codes-email")).data.message,severity:"success"})}catch(s){console.error(s),e({open:!0,message:s.response.data.message,severity:"error"})}}}}]);

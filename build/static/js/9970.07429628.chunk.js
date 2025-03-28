@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[9970],{9970:(a,e,c)=>{c.d(e,{enableTwoFactor:()=>r});var o=c(3785);async function r(a,e,c,r){try{const t=await(0,o.A)("/enable-two-factor");c(t.data.qrCodeImage),e(!0),r({...a,backupCodes:t.data.backupCodes,isTwoFactorEnabled:!0,qrCodeImage:t.data.qrCodeImage})}catch(t){console.error(t)}}}}]);

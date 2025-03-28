@@ -16,6 +16,8 @@ import useBroadcastApi from "./hooks/useBroadcastApi.js";
 import { ThemeProvider } from "@mui/material/styles";
 import useTheme from "./hooks/useTheme.js";
 import useMuiTheme from "./hooks/useMuiTheme.js";
+import ErrorFallback from "./components/customComponents/ErrorFallback.js";
+import { ErrorBoundary } from "react-error-boundary";
 const HomePage = React.lazy(() => import("./pages/HomePage"));
 const LoginPage = React.lazy(() => import("./pages/LoginPage"));
 const SpotlightModal = React.lazy(() => import("./modals/SpotlightModal"));
@@ -25,7 +27,7 @@ function App() {
   const [user, setUser] = useState();
   const { theme, toggleTheme } = useTheme();
   const muiTheme = useMuiTheme(theme);
-  const [alert, setAlert] = React.useState({
+  const [alert, setAlert] = useState({
     open: false,
     message: "",
     severity: "",
@@ -42,21 +44,26 @@ function App() {
   useToggleSidebar(setShowSidebar);
   const handleUseInThisTab = useBroadcastApi(channel, setBroadcastModal);
 
+  const userContextValue = useMemo(
+    () => ({ user, setUser, handleLogout }),
+    [user, handleLogout]
+  );
+  const alertContextValue = useMemo(() => ({ alert, setAlert }), [alert]);
+
   useEffect(() => {
     if (alert.open) {
       const timer = setTimeout(() => {
         setAlert({ ...alert, open: false });
       }, 2000);
-
-      return () => clearTimeout(timer); // Cleanup on component unmount
+      return () => clearTimeout(timer);
     }
   }, [alert]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <ThemeProvider theme={muiTheme}>
-        <UserContext.Provider value={{ user, setUser, handleLogout }}>
-          <AlertContext.Provider value={{ alert, setAlert }}>
+        <UserContext.Provider value={userContextValue}>
+          <AlertContext.Provider value={alertContextValue}>
             <div className="App" id={theme}>
               {loading ? (
                 <div
@@ -71,36 +78,44 @@ function App() {
                 </div>
               ) : user ? (
                 <Suspense fallback={<CircularProgress />}>
-                  <HomePage
-                    showSidebar={showSidebar}
-                    setShowSidebar={setShowSidebar}
-                  />
+                  <ErrorBoundary fallback={<ErrorFallback />}>
+                    <HomePage
+                      showSidebar={showSidebar}
+                      setShowSidebar={setShowSidebar}
+                    />
+                  </ErrorBoundary>
                 </Suspense>
               ) : (
                 <Suspense fallback={<CircularProgress />}>
-                  <LoginPage />
+                  <ErrorBoundary fallback={<ErrorFallback />}>
+                    <LoginPage />
+                  </ErrorBoundary>
                 </Suspense>
               )}
             </div>
 
             <Suspense fallback={<CircularProgress />}>
-              <SpotlightModal
-                open={open}
-                handleOpen={handleOpen}
-                handleClose={handleClose}
-              />
+              <ErrorBoundary fallback={<ErrorFallback />}>
+                <SpotlightModal
+                  open={open}
+                  handleOpen={handleOpen}
+                  handleClose={handleClose}
+                />
+              </ErrorBoundary>
             </Suspense>
 
             <Suspense fallback={<CircularProgress />}>
-              <BroadcastModal
-                open={broadcastModal}
-                handleUseInThisTab={handleUseInThisTab}
-                handleClose={(event, reason) => {
-                  if (reason !== "backdropClick") {
-                    setBroadcastModal(false);
-                  }
-                }}
-              />
+              <ErrorBoundary fallback={<ErrorFallback />}>
+                <BroadcastModal
+                  open={broadcastModal}
+                  handleUseInThisTab={handleUseInThisTab}
+                  handleClose={(event, reason) => {
+                    if (reason !== "backdropClick") {
+                      setBroadcastModal(false);
+                    }
+                  }}
+                />
+              </ErrorBoundary>
             </Suspense>
 
             {alert.open && (

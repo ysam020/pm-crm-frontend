@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Popover, Box } from "@mui/material";
 import apiClient from "../../config/axiosConfig";
@@ -15,27 +15,40 @@ function EventPopover(props) {
     }
   };
 
+  const anchorOrigin = useMemo(
+    () => ({
+      vertical: "bottom",
+      horizontal: "left",
+    }),
+    []
+  );
+
+  const transformOrigin = useMemo(
+    () => ({
+      vertical: "top",
+      horizontal: "left",
+    }),
+    []
+  );
+
+  const popoverContentStyle = useMemo(
+    () => ({
+      display: "flex",
+      alignItems: "center",
+    }),
+    []
+  );
+
   return (
     <Popover
       open={props.openPopover}
       anchorEl={props.popoverAnchorEl}
       onClose={props.handlePopoverClose}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
     >
       <Box>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <div style={popoverContentStyle}>
           <div style={{ flex: 1 }}>
             <strong>{props.selectedEvent?.title}</strong>
             <br />
@@ -55,4 +68,4 @@ function EventPopover(props) {
   );
 }
 
-export default EventPopover;
+export default React.memo(EventPopover);

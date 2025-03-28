@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[8925],{8925:(a,e,s)=>{s.d(e,{handleCalendarNavigation:()=>t});const t=(a,e,s,t,c)=>{let n=e+a,r=s;n<0?(n=11,r-=1):n>11&&(n=0,r+=1),t(n),c(r)}}}]);

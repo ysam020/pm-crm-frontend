@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import Grid from "@mui/material/Grid2";
 import { useFormik } from "formik";
 import CustomTextField from "../../customComponents/CustomTextField";
 import CustomButton from "../../customComponents/CustomButton";
@@ -65,21 +66,27 @@ function AttendanceCorrection() {
         )}
       />
 
-      <CustomTextField
-        id="timeIn"
-        name="timeIn"
-        label="Time In"
-        type="time"
-        formik={formik}
-      />
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 4, sm: 4, md: 4, lg: 6 }}>
+          <CustomTextField
+            id="timeIn"
+            name="timeIn"
+            label="Time In"
+            type="time"
+            formik={formik}
+          />
+        </Grid>
 
-      <CustomTextField
-        id="timeOut"
-        name="timeOut"
-        label="Time Out"
-        type="time"
-        formik={formik}
-      />
+        <Grid size={{ xs: 4, sm: 4, md: 4, lg: 6 }}>
+          <CustomTextField
+            id="timeOut"
+            name="timeOut"
+            label="Time Out"
+            type="time"
+            formik={formik}
+          />
+        </Grid>
+      </Grid>
 
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
     </form>

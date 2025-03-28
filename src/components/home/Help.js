@@ -1,5 +1,5 @@
 import "../../styles/keyboard-shortcuts.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -14,35 +14,43 @@ function Help() {
     setIsMac(userAgent.includes("mac"));
   }, []);
 
-  const getShortcutKeys = (keys) =>
-    keys.map((key, index) => (
-      <span key={index} className="key">
-        {key}
-      </span>
-    ));
+  // Memoize keyboard shortcuts
+  const keyboardShortcuts = useMemo(
+    () => [
+      {
+        title: "Toggle Fullscreen",
+        keys: [isMac ? "Cmd" : "Ctrl", "Shift", "F"],
+      },
+      {
+        title: "Show/Hide Sidebar",
+        keys: [isMac ? "Cmd" : "Ctrl", "Shift", "S"],
+      },
+      {
+        title: "Route Query",
+        keys: ["Shift", "Space"],
+      },
+      {
+        title: "Navigate Between Pages",
+        keys: [isMac ? "Cmd" : "Ctrl", "Shift", "← →"],
+      },
+      {
+        title: "Logout",
+        keys: [isMac ? "Cmd" : "Ctrl", "Shift", "L"],
+      },
+    ],
+    [isMac] // Recalculate only when `isMac` changes
+  );
 
-  const keyboardShortcuts = [
-    {
-      title: "Toggle Fullscreen",
-      keys: [isMac ? "Cmd" : "Ctrl", "Shift", "F"],
-    },
-    {
-      title: "Show/Hide Sidebar",
-      keys: [isMac ? "Cmd" : "Ctrl", "Shift", "S"],
-    },
-    {
-      title: "Route Query",
-      keys: ["Shift", "Space"],
-    },
-    {
-      title: "Navigate Between Pages",
-      keys: [isMac ? "Cmd" : "Ctrl", "Shift", "← →"],
-    },
-    {
-      title: "Logout",
-      keys: [isMac ? "Cmd" : "Ctrl", "Shift", "L"],
-    },
-  ];
+  // Memoize shortcut key rendering function
+  const getShortcutKeys = useMemo(
+    () => (keys) =>
+      keys.map((key, index) => (
+        <span key={index} className="key">
+          {key}
+        </span>
+      )),
+    []
+  );
 
   return (
     <Grid container>

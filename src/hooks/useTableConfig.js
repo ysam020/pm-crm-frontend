@@ -10,13 +10,13 @@ function useTableConfig(data, columns, loading) {
     columns,
     data: loading ? generateSkeletonData(columns) : data,
     enableColumnResizing: true,
-    enableColumnOrdering: true,
+    enableColumnOrdering: false,
     enablePagination: false,
     enableTopToolbar: true,
     enableBottomToolbar: false,
     enableDensityToggle: false, // Disable density toggle
     initialState: { density: "compact" }, // Set initial table density to compact
-    enableGrouping: true, // Enable row grouping
+    enableGrouping: false, // Disable row grouping
     enableColumnFilters: false, // Disable column filters
     enableColumnActions: false,
     enableStickyHeader: true, // Enable sticky header

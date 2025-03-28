@@ -1,22 +1,37 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
-function Info(props) {
+function Info({ user }) {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
+
+  // Memoizing styles to prevent unnecessary recalculations on re-renders
+  const containerStyle = useMemo(
+    () => ({
+      background: "url(/assets/images/personal.webp)",
+      backgroundColor: theme === "light" ? "#1abc9c" : "#212e35",
+    }),
+    [theme]
+  );
+
+  const textStyle = useMemo(
+    () => ({
+      color: theme === "light" ? "#EFEFEF" : "#BDBDBD",
+      fontWeight: 700,
+    }),
+    [theme]
+  );
+
   return (
     <div
       onClick={() => navigate("/profile")}
       className="dashboard-container info"
-      style={{
-        background: "url(/assets/images/personal.webp)",
-        backgroundColor: theme === "light" ? "#1abc9c" : "#212e35",
-      }}
+      style={containerStyle}
     >
-      <p>Welcome back,</p>
+      <p style={textStyle}>Welcome back,</p>
       <br />
-      <h1>{props.user.full_name}</h1>
+      <h1>{user.full_name}</h1>
     </div>
   );
 }

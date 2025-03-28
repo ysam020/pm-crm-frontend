@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useUpdateFavicon from "../../hooks/useUpdateFavicon";
@@ -9,23 +9,34 @@ function Notifications() {
   const navigate = useNavigate();
   useUpdateFavicon(notifications);
 
-  const renderSkeleton = (key) => (
-    <div
-      key={key}
-      className="notification-container"
-      style={{ display: "block" }}
-    >
-      <Skeleton width="20%" />
-      <Skeleton />
-      <Skeleton width="60%" />
-    </div>
+  // Memoize notifications list to avoid unnecessary re-renders
+  const memoizedNotifications = useMemo(() => notifications, [notifications]);
+
+  const renderSkeleton = useMemo(
+    () => (key) =>
+      (
+        <div
+          key={key}
+          className="notification-container"
+          style={{ display: "block" }}
+        >
+          <Skeleton width="20%" />
+          <Skeleton />
+          <Skeleton width="60%" />
+        </div>
+      ),
+    []
   );
 
-  const renderNotificationContent = (item) => (
-    <div style={{ flex: 1 }}>
-      <span>{item.title}</span>
-      <p>{item.message}</p>
-    </div>
+  const renderNotificationContent = useMemo(
+    () => (item) =>
+      (
+        <>
+          <span>{item.title}</span>
+          <p>{item.message}</p>
+        </>
+      ),
+    []
   );
 
   const handleNotificationClick = async (itemTitle) => {
@@ -36,16 +47,13 @@ function Notifications() {
   };
 
   return (
-    <div className="dashboard-container notifications">
-      <h2>
-        <strong>Notifications</strong>
-      </h2>
+    <div className="notifications">
       {loading ? (
         Array(3)
           .fill(null)
           .map((_, index) => renderSkeleton(index))
-      ) : notifications.length > 0 ? (
-        notifications.map((item, id) => (
+      ) : memoizedNotifications.length > 0 ? (
+        memoizedNotifications.map((item, id) => (
           <div
             key={id}
             className="notification-container"

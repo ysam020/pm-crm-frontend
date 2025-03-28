@@ -13,7 +13,6 @@ import routesConfig from "../../routes/routesConfig";
 import { UserContext } from "../../contexts/UserContext";
 import apiClient from "../../config/axiosConfig";
 import { AlertContext } from "../../contexts/AlertContext";
-import protobuf from "protobufjs";
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -47,33 +46,13 @@ function AssignModule(props) {
     async function getUserModules() {
       if (props.selectedUser) {
         try {
-          const root = await protobuf.load("/user.proto");
-          const GetUserModules = root.lookupType("userpackage.GetUserModules");
-
-          const response = await apiClient(
-            `/get-user-modules/${props.selectedUser}`,
-            {
-              headers: {
-                Accept: "application/x-protobuf",
-              },
-              responseType: "arraybuffer",
-            }
+          const res = await apiClient(
+            `/get-user-modules/${props.selectedUser}`
           );
 
-          // Decode the protobuf response
-          const message = GetUserModules.decode(new Uint8Array(response.data));
-
-          // Convert to plain object
-          const data = GetUserModules.toObject(message, {
-            longs: String,
-            enums: String,
-            defaults: true,
-            arrays: true,
-          });
-
-          setRight(data.modules);
+          setRight(res.data.modules);
           setLeft(
-            allModules.filter((module) => !data.modules?.includes(module))
+            allModules.filter((module) => !res.data.modules?.includes(module))
           );
         } catch (error) {
           console.error("Error occurred while fetching user modules:", error);
@@ -97,17 +76,30 @@ function AssignModule(props) {
   const rightChecked = intersection(checked, right);
 
   const handleToggle = (value) => async () => {
-    const { handleToggle } = await import("../../utils/modules/handleToggle");
-    handleToggle(value, checked, setChecked);
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
   };
 
   const numberOfChecked = (items) => intersection(checked, items)?.length;
 
-  const handleToggleAll = (items) => async () => {
-    const { handleToggleAll } = await import(
-      "../../utils/modules/handleToggleAll"
-    );
-    handleToggleAll(items, union, numberOfChecked, not, checked, setChecked);
+  const handleToggleAll = (items) => () => {
+    if (items.length === 0) {
+      return;
+    }
+
+    if (numberOfChecked(items) === items.length) {
+      setChecked(not(checked, items));
+    } else {
+      setChecked(union(checked, items));
+    }
   };
 
   const handleAssignModule = async () => {

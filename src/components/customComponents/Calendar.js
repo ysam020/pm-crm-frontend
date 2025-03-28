@@ -70,7 +70,7 @@ const CustomCalendar = (props) => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: "20px" }}>
       <header
         style={{
           alignItems: "center",

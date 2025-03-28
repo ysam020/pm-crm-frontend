@@ -3,6 +3,7 @@ import apiClient from "../../config/axiosConfig";
 export async function disableTwoFactor(setIsTwoFactorEnabled, setAlert) {
   try {
     const res = await apiClient.delete(`/disable-two-factor`);
+
     if (res.data.message === "Two factor authentication disabled") {
       setIsTwoFactorEnabled(false);
     } else {

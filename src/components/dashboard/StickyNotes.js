@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
 import { IconButton } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import SaveIcon from "@mui/icons-material/Save";
@@ -39,30 +39,37 @@ function StickyNotes() {
     },
   });
 
-  // Load initial note data on mount
-  useEffect(() => {
-    async function getNote() {
-      try {
-        const response = await apiClient.get(`/get-sticky-note`, {
-          withCredentials: true,
-        });
-        const content = response.data ? response.data : "<h3>Note</h3>";
+  // Fetch and memoize the note content
+  const fetchNote = async () => {
+    try {
+      const response = await apiClient.get(`/get-sticky-note`, {
+        withCredentials: true,
+      });
+      return response.data ? response.data : "<h3>Note</h3>";
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      return "<h3>Note</h3>";
+    }
+  };
+
+  const memoizedNote = useMemo(() => {
+    let isMounted = true;
+    fetchNote().then((content) => {
+      if (isMounted) {
         formik.setFieldValue("content", content);
         if (contentRef.current) {
           contentRef.current.innerHTML = content;
         }
-      } catch (error) {
-        console.error("Error fetching content:", error);
       }
-    }
-    getNote();
+    });
+    return formik.values.content;
     // eslint-disable-next-line
   }, []);
 
-  // Set initial content
+  // Set initial content on mount
   useEffect(() => {
     if (contentRef.current) {
-      contentRef.current.innerHTML = formik.values.content;
+      contentRef.current.innerHTML = memoizedNote;
     }
     // eslint-disable-next-line
   }, []);
@@ -105,4 +112,4 @@ function StickyNotes() {
   );
 }
 
-export default StickyNotes;
+export default React.memo(StickyNotes);

@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,6 +13,8 @@ import useTableConfig from "../../../hooks/useTableConfig";
 import apiClient from "../../../config/axiosConfig";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { tableToolbarDate } from "../../../utils/table/tableToolbarDate";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewLeaveApplications() {
   const [data, setData] = useState([]);
@@ -20,82 +28,64 @@ function ViewLeaveApplications() {
     )}`;
   });
 
-  async function getLeaveApplications() {
+  const getLeaveApplications = useCallback(async () => {
     setLoading(true);
     try {
       const [year, month] = date.split("-");
       const res = await apiClient(`/get-leave-applications/${year}-${month}`);
-
       setData(res.data);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [date]);
 
-  const handleLeaveApproval = async (_id, username, status) => {
-    try {
-      await apiClient.put(`/update-leave-status`, { _id, username, status });
+  useEffect(() => {
+    getLeaveApplications();
+  }, [getLeaveApplications]);
 
-      getLeaveApplications();
-    } catch (error) {
-      setAlert({
-        open: true,
-        message:
-          error.message === "Network Error"
-            ? "Network Error, your details will be submitted when you are back online"
-            : error.response.data.message,
-        severity: "error",
-      });
-    }
-  };
+  const handleLeaveApproval = useCallback(
+    async (_id, username, status) => {
+      try {
+        await apiClient.put(`/update-leave-status`, { _id, username, status });
+        getLeaveApplications();
+      } catch (error) {
+        setAlert({
+          open: true,
+          message:
+            error.message === "Network Error"
+              ? "Network Error, your details will be submitted when you are back online"
+              : error.response?.data?.message || "An error occurred",
+          severity: "error",
+        });
+      }
+    },
+    [setAlert, getLeaveApplications]
+  );
 
-  const columns = [
-    {
-      accessorKey: "username",
-      header: "Username",
-      size: 160,
-    },
-    {
-      accessorKey: "from",
-      header: "From",
-      size: 120,
-    },
-    {
-      accessorKey: "to",
-      header: "To",
-      size: 120,
-    },
-    {
-      accessorKey: "reason",
-      header: "Reason",
-      size: 200,
-    },
-    {
-      accessorKey: "sick_leave",
-      header: "Sick Leave",
-      size: 130,
-    },
-    {
-      accessorKey: "medical_certificate",
-      header: "Medical Certificate",
-      size: 180,
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      size: 150,
-    },
-    {
-      accessorKey: "approve",
-      header: "Action",
-      size: 220,
-      Cell: ({ cell }) => {
-        return (
+  // Memoized columns
+  const columns = useMemo(
+    () => [
+      { accessorKey: "username", header: "Username", size: 160 },
+      { accessorKey: "from", header: "From", size: 120 },
+      { accessorKey: "to", header: "To", size: 120 },
+      { accessorKey: "reason", header: "Reason", size: 200 },
+      { accessorKey: "sick_leave", header: "Sick Leave", size: 130 },
+      {
+        accessorKey: "medical_certificate",
+        header: "Medical Certificate",
+        size: 180,
+      },
+      { accessorKey: "status", header: "Status", size: 150 },
+      {
+        accessorKey: "approve",
+        header: "Action",
+        size: 220,
+        Cell: ({ cell }) => (
           <>
             <span
-              className="link"
+              className="link approve-link"
               onClick={() =>
                 handleLeaveApproval(
                   cell.row.original._id,
@@ -104,10 +94,10 @@ function ViewLeaveApplications() {
                 )
               }
             >
-              Approve&nbsp;|&nbsp;
+              Approve
             </span>
             <span
-              className="link"
+              className="link reject-link"
               onClick={() =>
                 handleLeaveApproval(
                   cell.row.original._id,
@@ -119,28 +109,34 @@ function ViewLeaveApplications() {
               Reject
             </span>
           </>
-        );
+        ),
       },
-    },
-  ];
+    ],
+    [handleLeaveApproval]
+  );
 
-  const baseConfig = useTableConfig(data, columns, loading);
+  // Memoize API data
+  const memoizedData = useMemo(() => data, [data]);
 
-  const customToolbarActions = tableToolbarDate(date, setDate);
+  // Call `useTableConfig` at the top level
+  const tableConfig = useTableConfig(memoizedData, columns, loading);
+
+  // Memoize toolbar actions
+  const customToolbarActions = useMemo(
+    () => tableToolbarDate(date, setDate),
+    [date]
+  );
 
   const table = useMaterialReactTable({
-    ...baseConfig,
+    ...tableConfig,
     ...customToolbarActions,
   });
 
-  useEffect(() => {
-    getLeaveApplications();
-    // eslint-disable-next-line
-  }, [date]);
-
   return (
     <div>
-      <MaterialReactTable table={table} />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <MaterialReactTable table={table} />
+      </ErrorBoundary>
     </div>
   );
 }

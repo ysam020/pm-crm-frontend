@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[5231],{5231:(e,s,a)=>{a.d(s,{handleNotificationClick:()=>c});const c=(e,s)=>{switch(e){case"Leave Request":case"Week Off Request":s("/attendance");break;case"Resignation":s("/resignation-process")}}}}]);

@@ -5,7 +5,7 @@ export const deleteCodes = async (user, setUser, setAlert) => {
     const res = await apiClient.delete(`/delete-backup-codes`);
 
     if (res.data.message === "Backup codes deleted") {
-      setUser({ ...user, backup_codes: [] });
+      setUser({ ...user, backupCodes: [] });
     } else {
       setAlert({
         open: true,

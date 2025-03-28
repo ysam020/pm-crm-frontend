@@ -58,7 +58,7 @@ function LoginForm(props) {
           geolocation: geoLocation,
         });
       } catch (error) {
-        console.log(error.response.data.message);
+        console.error(error.response.data.message);
         setAlert({
           open: true,
           message: error.response.data.message,
@@ -101,7 +101,7 @@ function LoginForm(props) {
         {props.isTwoFactorEnabled && (
           <div>
             {!useBackupCode ? (
-              <span>Enter Google Authenticator token</span>
+              <span>Enter Authenticator token</span>
             ) : (
               <span>Enter Backup Code</span>
             )}

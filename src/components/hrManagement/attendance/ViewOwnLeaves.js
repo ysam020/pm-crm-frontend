@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -6,6 +6,8 @@ import {
 import useTableConfig from "../../../hooks/useTableConfig";
 import { getTableColumns } from "../../../utils/table/getTableColumns";
 import { tableToolbarDate } from "../../../utils/table/tableToolbarDate";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewOwnLeaves(props) {
   useEffect(() => {
@@ -13,55 +15,49 @@ function ViewOwnLeaves(props) {
     // eslint-disable-next-line
   }, [props.date]);
 
-  const baseColumns = [
-    {
-      accessorKey: "from",
-      header: "From",
-      Cell: ({ cell }) => {
-        const dateValue = cell.row.original?.from;
-        if (typeof dateValue === "string") {
-          return <>{dateValue.split("-").reverse().join("-")}</>;
-        } else if (dateValue instanceof Date) {
-          return <>{dateValue.toLocaleDateString("en-GB")}</>;
-        } else {
-          return <>N/A</>;
-        }
+  const baseColumns = useMemo(
+    () => [
+      {
+        accessorKey: "from",
+        header: "From",
+        Cell: ({ cell }) => {
+          const dateValue = cell.row.original?.from;
+          if (typeof dateValue === "string") {
+            return <>{dateValue.split("-").reverse().join("-")}</>;
+          } else if (dateValue instanceof Date) {
+            return <>{dateValue.toLocaleDateString("en-GB")}</>;
+          } else {
+            return <>N/A</>;
+          }
+        },
       },
-    },
-    {
-      accessorKey: "to",
-      header: "To",
-      Cell: ({ cell }) => {
-        const dateValue = cell.row.original?.to;
-        if (typeof dateValue === "string") {
-          return <>{dateValue.split("-").reverse().join("-")}</>;
-        } else if (dateValue instanceof Date) {
-          return <>{dateValue.toLocaleDateString("en-GB")}</>;
-        } else {
-          return <>N/A</>;
-        }
+      {
+        accessorKey: "to",
+        header: "To",
+        Cell: ({ cell }) => {
+          const dateValue = cell.row.original?.to;
+          if (typeof dateValue === "string") {
+            return <>{dateValue.split("-").reverse().join("-")}</>;
+          } else if (dateValue instanceof Date) {
+            return <>{dateValue.toLocaleDateString("en-GB")}</>;
+          } else {
+            return <>N/A</>;
+          }
+        },
       },
-    },
-    {
-      accessorKey: "reason",
-      header: "Reason",
-    },
-    {
-      accessorKey: "sick_leave",
-      header: "Sick Leave",
-    },
-    {
-      accessorKey: "medical_certificate",
-      header: "Medical Certificate",
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-    },
-  ];
+      { accessorKey: "reason", header: "Reason" },
+      { accessorKey: "sick_leave", header: "Sick Leave" },
+      { accessorKey: "medical_certificate", header: "Medical Certificate" },
+      { accessorKey: "status", header: "Status" },
+    ],
+    []
+  );
 
-  const columns = getTableColumns(baseColumns);
-  const baseConfig = useTableConfig(props.data, columns, props.loading);
+  const columns = useMemo(() => getTableColumns(baseColumns), [baseColumns]);
+
+  const memoizedData = useMemo(() => props.data, [props.data]);
+
+  const baseConfig = useTableConfig(memoizedData, columns, props.loading);
 
   const customToolbarActions = tableToolbarDate(props.date, props.setDate);
 
@@ -72,7 +68,9 @@ function ViewOwnLeaves(props) {
 
   return (
     <div>
-      <MaterialReactTable table={table} />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <MaterialReactTable table={table} />
+      </ErrorBoundary>
     </div>
   );
 }

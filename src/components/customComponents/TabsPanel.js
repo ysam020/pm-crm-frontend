@@ -3,6 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import useTabs from "../../hooks/useTabs";
+import ErrorFallback from "./ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function TabsPanel({ tabData, tabKey }) {
   const [value, setValue] = React.useState(
@@ -33,7 +35,9 @@ function TabsPanel({ tabData, tabKey }) {
         {tabData.map((tab, index) => (
           <CustomTabPanel value={value} index={index} key={index}>
             <React.Suspense fallback={<div>Loading...</div>}>
-              {React.createElement(tab.component)}
+              <ErrorBoundary fallback={<ErrorFallback />}>
+                {React.createElement(tab.component)}
+              </ErrorBoundary>
             </React.Suspense>
           </CustomTabPanel>
         ))}

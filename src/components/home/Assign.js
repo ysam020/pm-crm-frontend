@@ -1,21 +1,28 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useMemo } from "react";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import useUserList from "../../hooks/useUserList";
+import ErrorFallback from "../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
+
 const AssignModule = React.lazy(() => import("./AssignModule"));
 
 function Assign() {
-  const userList = useUserList();
+  const rawUserList = useUserList();
   const [selectedUser, setSelectedUser] = useState("");
+
+  // Memoize the user list to prevent unnecessary re-fetching
+  const userList = useMemo(() => rawUserList || [], [rawUserList]);
+
+  // Memoize selectedUser to avoid unnecessary re-renders
+  const memoizedSelectedUser = useMemo(() => selectedUser, [selectedUser]);
 
   return (
     <>
       <div style={{ marginTop: "20px" }}>
         <Autocomplete
-          value={selectedUser}
-          onChange={(event, newValue) => {
-            setSelectedUser(newValue);
-          }}
+          value={memoizedSelectedUser}
+          onChange={(event, newValue) => setSelectedUser(newValue)}
           options={userList}
           getOptionLabel={(option) => option}
           sx={{ width: 200, marginBottom: "20px" }}
@@ -26,7 +33,9 @@ function Assign() {
       </div>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <AssignModule selectedUser={selectedUser} />
+        <ErrorBoundary fallback={<ErrorFallback />}>
+          <AssignModule selectedUser={memoizedSelectedUser} />
+        </ErrorBoundary>
       </Suspense>
     </>
   );

@@ -89,7 +89,7 @@ function WebAuthnLoginForm(props) {
       } catch (err) {
         console.error(err);
         if (err.name === "NotAllowedError") {
-          console.log("User canceled the WebAuthn prompt.");
+          console.warn("User canceled the WebAuthn prompt.");
         } else {
           console.error(err);
         }

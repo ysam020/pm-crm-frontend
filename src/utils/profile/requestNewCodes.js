@@ -28,7 +28,7 @@ export const requestNewCodes = async (user, setUser) => {
         arrays: true,
       });
 
-      setUser({ ...user, backup_codes: data.backupCodes });
+      setUser({ ...user, backupCodes: data.backupCodes });
     } catch (error) {
       console.error("Error requesting backup codes:", error);
       return {

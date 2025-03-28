@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@mui/material";
@@ -26,15 +26,24 @@ function Attendance() {
     getData();
   }, []);
 
-  const InfoCol = ({ label, value, className }) => (
-    <Grid size={4} className={className}>
-      {loading ? (
-        <Skeleton variant="text" width="30%" />
-      ) : (
-        <span className={className}>{value}</span>
-      )}
-      <p className={`${className}-label`}>{label}</p>
-    </Grid>
+  // Memoized data to avoid unnecessary recalculations
+  const memoizedData = useMemo(() => data, [data]);
+
+  // Memoized InfoCol component
+  const InfoCol = useMemo(
+    () =>
+      ({ label, value, className }) =>
+        (
+          <Grid size={4} className={className}>
+            {loading ? (
+              <Skeleton variant="text" width="30%" />
+            ) : (
+              <span className={className}>{value}</span>
+            )}
+            <p className={`${className}-label`}>{label}</p>
+          </Grid>
+        ),
+    [loading]
   );
 
   return (
@@ -50,26 +59,34 @@ function Attendance() {
       <Grid container className="attendance-row attendance-row-1">
         <InfoCol
           label="Working Days"
-          value={data?.workingDays}
+          value={memoizedData?.workingDays}
           className="working-days"
         />
-        <InfoCol label="Presents" value={data?.presents} className="presents" />
-        <InfoCol label="Leaves" value={data?.leaves} className="leaves" />
+        <InfoCol
+          label="Presents"
+          value={memoizedData?.presents}
+          className="presents"
+        />
+        <InfoCol
+          label="Leaves"
+          value={memoizedData?.leaves}
+          className="leaves"
+        />
       </Grid>
       <Grid container className="attendance-row attendance-row-2">
         <InfoCol
           label="Paid Leaves"
-          value={data?.paidLeaves}
+          value={memoizedData?.paidLeaves}
           className="paid-leaves"
         />
         <InfoCol
           label="Unpaid Leaves"
-          value={data?.unpaidLeaves}
+          value={memoizedData?.unpaidLeaves}
           className="unpaid-leaves"
         />
         <InfoCol
           label="Week Offs"
-          value={data?.weekOffs}
+          value={memoizedData?.weekOffs}
           className="week-offs"
         />
       </Grid>

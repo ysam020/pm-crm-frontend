@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[8747],{8747:(r,n,t)=>{t.d(n,{getLoginOptions:()=>a});var e=t(3785);async function a(r){try{return(await e.A.post("/webauthn-login-options",{username:r})).data}catch(n){return console.error("Login options error:",n),null}}}}]);

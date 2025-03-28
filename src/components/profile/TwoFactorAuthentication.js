@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid2";
 import Switch from "@mui/material/Switch";
 import Divider from "@mui/material/Divider";
 import { AlertContext } from "../../contexts/AlertContext";
+import Box from "@mui/material/Box";
 
 function TwoFactorAuthentication() {
   const { user, setUser } = useContext(UserContext);
@@ -38,70 +39,64 @@ function TwoFactorAuthentication() {
   return (
     <Grid container>
       <Grid size={12}>
-        <div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <List
+        <List sx={{ width: "100%" }}>
+          <ListItem>
+            <ListItemText primary="WebAuthn Registration (for password-less login)" />
+            {/* Use the secondary prop with a string, or use the secondaryTypographyProps */}
+            <Box
               sx={{
-                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
               }}
             >
+              <button
+                style={{ marginTop: 0 }}
+                className="btn"
+                onClick={async () => {
+                  const { initiateWebauthnRegistration } = await import(
+                    "../../utils/webAuthn/initiateWebauthnRegistration"
+                  );
+                  initiateWebauthnRegistration(setAlert);
+                }}
+              >
+                Enable on this device
+              </button>
+              <button
+                style={{ marginTop: 0, marginLeft: "10px" }}
+                className="btn"
+                onClick={async () => {
+                  const { disableWebAuthn } = await import(
+                    "../../utils/webAuthn/disableWebAuthn"
+                  );
+                  disableWebAuthn(setAlert);
+                }}
+              >
+                Disable
+              </button>
+            </Box>
+          </ListItem>
+          <Divider variant="fullWidth" component="li" />
+          <ListItem alignItems="flex-start">
+            <ListItemText primary="Two Factor Authentication (2FA)" />
+            <Switch
+              checked={isTwoFactorEnabled}
+              onChange={handleTwoFASwitchChange}
+            />
+          </ListItem>
+          {isTwoFactorEnabled && (
+            <>
               <ListItem alignItems="flex-start">
-                <ListItemText primary="WebAuthn Registration (for password-less login)" />
-                <ListItemText
-                  secondary={
-                    <>
-                      <button
-                        style={{ marginTop: 0 }}
-                        className="btn"
-                        onClick={async () => {
-                          const { initiateWebauthnRegistration } = await import(
-                            "../../utils/webAuthn/initiateWebauthnRegistration"
-                          );
-                          initiateWebauthnRegistration(setAlert);
-                        }}
-                      >
-                        Enable on this device
-                      </button>
-                      <button
-                        style={{ marginTop: 0, marginLeft: "10px" }}
-                        className="btn"
-                        onClick={async () => {
-                          const { disableWebAuthn } = await import(
-                            "../../utils/webAuthn/disableWebAuthn"
-                          );
-                          disableWebAuthn(setAlert);
-                        }}
-                      >
-                        Disable
-                      </button>
-                    </>
-                  }
-                />
+                <ListItemText primary="Scan the QR code below to enable 2FA using Authenticator App" />
               </ListItem>
-              <Divider variant="fullWidth" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemText primary="Google Authenticator (2FA)" />
-                <ListItemText
-                  secondary={
-                    <Switch
-                      checked={isTwoFactorEnabled}
-                      onChange={handleTwoFASwitchChange}
-                    />
-                  }
-                />
-              </ListItem>
-              {isTwoFactorEnabled && (
-                <>
-                  <ListItem alignItems="flex-start">
-                    <ListItemText primary="Scan the QR code below to enable 2FA using Google Authenticator App" />
-                    <ListItemText />
-                  </ListItem>
+              <ListItem>
+                <Box sx={{ width: "100%", textAlign: "center" }}>
                   <img src={qr} alt="QR code" />
-                </>
-              )}
-            </List>
-          </div>
-        </div>
+                </Box>
+              </ListItem>
+            </>
+          )}
+        </List>
       </Grid>
     </Grid>
   );

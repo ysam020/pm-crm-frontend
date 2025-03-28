@@ -8,6 +8,8 @@ import apiClient from "../../../config/axiosConfig";
 import { getTableColumns } from "../../../utils/table/getTableColumns";
 import { tableToolbarAutoComplete } from "../../../utils/table/tableToolbarAutoComplete";
 import useUserList from "../../../hooks/useUserList";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewWarningMemos() {
   const [data, setData] = useState([]);
@@ -59,9 +61,9 @@ function ViewWarningMemos() {
   });
 
   return (
-    <div>
+    <ErrorBoundary fallback={<ErrorFallback />}>
       <MaterialReactTable table={table} />
-    </div>
+    </ErrorBoundary>
   );
 }
 

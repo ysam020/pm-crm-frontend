@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -26,45 +26,41 @@ function HrActivities() {
     getData();
   }, []);
 
-  const baseColumns = [
-    {
-      accessorKey: "title",
-      header: "Title",
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
-    },
-    {
-      accessorKey: "date",
-      header: "Date",
+  // Memoize columns
+  const memoizedColumns = useMemo(
+    () =>
+      getTableColumns([
+        { accessorKey: "title", header: "Title" },
+        { accessorKey: "description", header: "Description" },
+        {
+          accessorKey: "date",
+          header: "Date",
+          Cell: ({ cell }) => {
+            const date = cell.getValue();
+            const formatDate = (dateString) => {
+              if (!dateString || typeof dateString !== "string") {
+                return <Skeleton width="50%" />;
+              }
+              const [year, month, day] = dateString.split("-");
+              return `${day}-${month}-${year}`;
+            };
+            return date ? formatDate(date) : "";
+          },
+        },
+        { accessorKey: "time", header: "Time" },
+      ]),
+    []
+  );
 
-      Cell: ({ cell }) => {
-        const date = cell.getValue();
-        const formatDate = (dateString) => {
-          if (!dateString || typeof dateString !== "string") {
-            return <Skeleton width="50%" />;
-          }
-          const [year, month, day] = dateString.split("-");
-          return `${day}-${month}-${year}`;
-        };
+  // Call useTableConfig at the top level
+  const baseConfig = useTableConfig(data, memoizedColumns, loading);
 
-        return date ? formatDate(date) : "";
-      },
-    },
-    {
-      accessorKey: "time",
-      header: "Time",
-    },
-  ];
+  // Memoize the table configuration object
+  const memoizedTableConfig = useMemo(() => {
+    return { ...baseConfig, enableTopToolbar: false };
+  }, [baseConfig]);
 
-  const columns = getTableColumns(baseColumns);
-  const baseConfig = useTableConfig(data, columns, loading);
-  baseConfig.enableTopToolbar = false;
-
-  const table = useMaterialReactTable({
-    ...baseConfig,
-  });
+  const table = useMaterialReactTable(memoizedTableConfig);
 
   return (
     <div className="dashboard-container hr-activities">

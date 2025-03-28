@@ -59,7 +59,7 @@ SERVER[icon: server]{
 SECURITY[icon: aws-security-group]{
 Session Management[icon: timer]
 JWT[icon:]
-2FA (Google Authenticator)[icon: google]
+2FA (Authenticator Apps)[icon: google]
 2FA (WebAuthn)[icon: fingerprint]
 }
 

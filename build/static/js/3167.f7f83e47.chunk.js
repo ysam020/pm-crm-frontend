@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[3167],{3167:(e,a,t)=>{async function r(e){return await navigator.credentials.get({publicKey:e})}t.d(a,{getCredential:()=>r})}}]);

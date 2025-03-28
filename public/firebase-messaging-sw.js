@@ -34,7 +34,7 @@ if (workbox) {
       cacheName: "static-assets-cache-v1",
       plugins: [
         new workbox.expiration.ExpirationPlugin({
-          maxAgeSeconds: 30 * 24 * 60 * 60, // Cache for 30 days
+          maxAgeSeconds: 1 * 60 * 60, // Cache for 1 hour (changed from 30 days)
           maxEntries: 1000, // Limit the number of entries in the cache
         }),
       ],
@@ -48,13 +48,13 @@ if (workbox) {
       : "https://sameer-yadav.online";
 
   workbox.routing.registerRoute(
-    ({ url }) => url.origin === "http://localhost:9002",
+    ({ url }) => url.origin === apiOrigin,
     new workbox.strategies.StaleWhileRevalidate({
       cacheName: "dynamic-api-cache-v1",
       plugins: [
         new workbox.expiration.ExpirationPlugin({
           maxEntries: 1000,
-          maxAgeSeconds: 1 * 60 * 60, // Cache for 1 hour
+          maxAgeSeconds: 5 * 60, // Cache for 5 minutes
         }),
       ],
     })
@@ -65,7 +65,7 @@ if (workbox) {
   workbox.routing.registerRoute(
     ({ request }) =>
       allowedMethods.includes(request.method) && // Match allowed methods dynamically
-      request.url.startsWith("http://localhost:9002"),
+      request.url.startsWith(apiOrigin),
     new workbox.strategies.NetworkOnly({
       plugins: [
         new workbox.backgroundSync.BackgroundSyncPlugin("formSubmissionQueue", {

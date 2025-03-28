@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import BasicInfo from "../../profile/BasicInfo";
 import { AlertContext } from "../../../contexts/AlertContext";
 import apiClient from "../../../config/axiosConfig";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewIndividualKyc() {
   const { username } = useParams();
@@ -53,25 +55,29 @@ function ViewIndividualKyc() {
     <>
       {data && (
         <div style={{ padding: 20 }}>
-          <BasicInfo user={data} />
-          <br />
-          <button className="btn" onClick={() => handleKycApproval(true)}>
-            Approve
-          </button>
-          <button
-            className="btn"
-            style={{ marginLeft: "10px" }}
-            onClick={() => handleKycApproval(false)}
-          >
-            Reject
-          </button>
-          <button
-            className="btn"
-            style={{ marginLeft: "10px" }}
-            onClick={() => navigate(`/edit-kyc/${data.username}`)}
-          >
-            Edit
-          </button>
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <BasicInfo user={data} />
+            <br />
+            <div className="flex-div">
+              <button className="btn" onClick={() => handleKycApproval(true)}>
+                Approve
+              </button>
+              <button
+                className="btn"
+                style={{ marginLeft: "10px" }}
+                onClick={() => handleKycApproval(false)}
+              >
+                Reject
+              </button>
+              <button
+                className="btn"
+                style={{ marginLeft: "10px" }}
+                onClick={() => navigate(`/edit-kyc/${data.username}`)}
+              >
+                Edit
+              </button>
+            </div>
+          </ErrorBoundary>
         </div>
       )}
     </>

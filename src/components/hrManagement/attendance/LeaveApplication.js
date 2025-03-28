@@ -1,4 +1,5 @@
 import React, { useState, useRef, useContext } from "react";
+import Grid from "@mui/material/Grid2";
 import { AlertContext } from "../../../contexts/AlertContext";
 import { useFormik } from "formik";
 import CustomTextField from "../../customComponents/CustomTextField";
@@ -72,29 +73,37 @@ function LeaveApplication() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <CustomTextField
-        id="from"
-        name="from"
-        label="From"
-        type="date"
-        formik={formik}
-      />
+      <Grid container spacing={1}>
+        {/* Left Section */}
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
+          <CustomTextField
+            id="from"
+            name="from"
+            label="From"
+            type="date"
+            formik={formik}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
+          <CustomTextField
+            id="to"
+            name="to"
+            label="To"
+            type="date"
+            formik={formik}
+          />
+        </Grid>
 
-      <CustomTextField
-        id="to"
-        name="to"
-        label="To"
-        type="date"
-        formik={formik}
-      />
-
-      <CustomTextField
-        id="reason"
-        name="reason"
-        label="Reason"
-        formik={formik}
-        useSpeech={true}
-      />
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
+          <CustomTextField
+            id="reason"
+            name="reason"
+            label="Reason"
+            formik={formik}
+            useSpeech={true}
+          />
+        </Grid>
+      </Grid>
 
       <FormGroup>
         <FormControlLabel

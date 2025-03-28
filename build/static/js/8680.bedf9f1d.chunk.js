@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[8680],{8680:(e,r,a)=>{a.d(r,{verifyCredential:()=>n});var t=a(3785);async function n(e,r){try{return(await t.A.post("/webauthn-verify-login",{username:e,credential:r})).data.success}catch(a){return console.error("Credential verification error:",a),!1}}}}]);

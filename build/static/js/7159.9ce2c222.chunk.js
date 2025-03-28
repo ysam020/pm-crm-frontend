@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[7159],{7159:(e,s,c)=>{c.d(s,{handleToggle:()=>a});const a=(e,s,c)=>{const a=s.indexOf(e),p=[...s];-1===a?p.push(e):p.splice(a,1),c(p)}}}]);

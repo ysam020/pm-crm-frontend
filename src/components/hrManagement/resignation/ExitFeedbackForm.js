@@ -46,8 +46,8 @@ function ExitFeedbackForm() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container>
-        <Grid size={4}>
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 4, sm: 4, md: 4, lg: 4 }}>
           Overall job satisfaction
           <br />
           <Rating
@@ -61,7 +61,7 @@ function ExitFeedbackForm() {
       </Grid>
 
       <h5>Management & Team Environment</h5>
-      <Grid container>
+      <Grid container spacing={1}>
         <Grid size={4}>
           <CustomTextField
             id="quality_of_communication"
@@ -90,7 +90,7 @@ function ExitFeedbackForm() {
           />
         </Grid>
       </Grid>
-      <Grid container>
+      <Grid container spacing={1}>
         <Grid size={4}>
           <CustomTextField
             id="collaboration_within_the_team"

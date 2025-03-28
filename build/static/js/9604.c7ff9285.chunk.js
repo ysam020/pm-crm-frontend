@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpaymaster_crm=self.webpackChunkpaymaster_crm||[]).push([[9604],{9604:(e,s,a)=>{a.d(s,{disableWebAuthn:()=>r});var t=a(3785);async function r(e){try{e({open:!0,message:(await(0,t.A)("/disable-webauthn")).data.message,severity:"success"})}catch(s){e({open:!0,message:s.response.data.message,severity:"error"})}}}}]);

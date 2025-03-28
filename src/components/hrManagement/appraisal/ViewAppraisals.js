@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -8,6 +8,8 @@ import apiClient from "../../../config/axiosConfig";
 import { getTableColumns } from "../../../utils/table/getTableColumns";
 import { tableToolbarAutoComplete } from "../../../utils/table/tableToolbarAutoComplete";
 import useUserList from "../../../hooks/useUserList";
+import ErrorFallback from "../../customComponents/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ViewAppraisals() {
   const [data, setData] = useState([]);
@@ -33,45 +35,42 @@ function ViewAppraisals() {
     getData();
   }, [selectedUser]);
 
-  const baseColumns = [
-    {
-      accessorKey: "appraisalDate",
-      header: "Appraisal Date",
-    },
-    {
-      accessorKey: "areasOfImprovement",
-      header: "Areas of Improvement",
-    },
-    {
-      accessorKey: "feedback",
-      header: "Feedback",
-    },
-    {
-      accessorKey: "performanceScore",
-      header: "Performance Score",
-    },
-    {
-      accessorKey: "strengths",
-      header: "Strengths",
-    },
-  ];
+  // Memoized data to prevent unnecessary re-renders
+  const memoizedData = useMemo(() => data, [data]);
 
-  const columns = getTableColumns(baseColumns);
-  const baseConfig = useTableConfig(data, columns, loading);
-  const customToolbarActions = tableToolbarAutoComplete(
-    selectedUser,
-    setSelectedUser,
-    userList
+  // Memoized columns
+  const baseColumns = useMemo(
+    () => [
+      { accessorKey: "appraisalDate", header: "Appraisal Date" },
+      { accessorKey: "areasOfImprovement", header: "Areas of Improvement" },
+      { accessorKey: "feedback", header: "Feedback" },
+      { accessorKey: "performanceScore", header: "Performance Score" },
+      { accessorKey: "strengths", header: "Strengths" },
+    ],
+    []
+  );
+
+  const columns = useMemo(() => getTableColumns(baseColumns), [baseColumns]);
+
+  // Call `useTableConfig` directly (hooks should not be inside `useMemo`)
+  const tableConfig = useTableConfig(memoizedData, columns, loading);
+
+  // Memoize toolbar actions
+  const customToolbarActions = useMemo(
+    () => tableToolbarAutoComplete(selectedUser, setSelectedUser, userList),
+    [selectedUser, userList]
   );
 
   const table = useMaterialReactTable({
-    ...baseConfig,
+    ...tableConfig,
     ...customToolbarActions,
   });
 
   return (
     <div>
-      <MaterialReactTable table={table} />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <MaterialReactTable table={table} />
+      </ErrorBoundary>
     </div>
   );
 }

@@ -22,6 +22,7 @@ function RejectModal(props) {
         ...values,
         aadharNo: props.aadharNo,
         jobTitle: props.jobTitle,
+        _id: props._id,
       };
 
       try {

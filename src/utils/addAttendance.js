@@ -2,26 +2,27 @@ import apiClient from "../config/axiosConfig";
 
 export const addAttendance = async (field, setAlert, getAttendances) => {
   try {
-    if (!navigator.geolocation) {
-      await apiClient.post(`/add-attendance`, {
-        field,
-        latitude: null,
-        longitude: null,
-      });
+    let latitude = null;
+    let longitude = null;
 
-      getAttendances();
-      return;
+    if (navigator.geolocation) {
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (position) => resolve(position),
+            (error) => reject(error),
+            { timeout: 10000, maximumAge: 0 }
+          );
+        });
+
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+      } catch (geoError) {
+        if (geoError.code === 1) {
+          throw new Error("User denied Geolocation");
+        }
+      }
     }
-
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => resolve(position),
-        (error) => reject(error),
-        { timeout: 10000, maximumAge: 0 }
-      );
-    });
-
-    const { latitude, longitude } = position.coords;
 
     await apiClient.post(`/add-attendance`, { field, latitude, longitude });
 

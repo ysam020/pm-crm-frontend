@@ -2,19 +2,27 @@ import { getToken } from "firebase/messaging";
 import { saveToken } from "./saveToken";
 import { messaging } from "../../config/firebase";
 
-// Generate FCM token
 export const generateToken = async (setAlert) => {
-  const permission = await Notification.requestPermission();
+  try {
+    const permission = await Notification.requestPermission();
 
-  if (permission === "granted") {
-    try {
-      const token = await getToken(messaging, {
-        vapidKey: process.env.REACT_APP_VAPID_KEY,
-      });
-
-      await saveToken(token, setAlert);
-    } catch (error) {
-      console.error("Error generating token:", error);
+    if (permission !== "granted") {
+      console.warn("Notification permission denied");
+      return;
     }
+
+    const token = await getToken(messaging, {
+      vapidKey: process.env.REACT_APP_VAPID_KEY,
+    });
+
+    if (!token) {
+      console.warn("Failed to generate FCM token.");
+      return;
+    }
+
+    console.log("Generated FCM Token:", token);
+    await saveToken(token, setAlert);
+  } catch (error) {
+    console.error("Error generating FCM token:", error);
   }
 };

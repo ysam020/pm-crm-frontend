@@ -38,12 +38,12 @@ export const handleFileUpload = async (
       const { url } = response.data;
 
       // Step 2: Upload the file directly to S3 using the pre-signed URL
-      await apiClient.put(url, file, {
+      const a = await apiClient.put(url, file, {
         headers: {
           "Content-Type": file.type,
         },
       });
-
+      console.log(a);
       // Store the S3 URL without the query parameters
       const uploadedFileUrl = url.split("?")[0]; // Remove the query parameters from the S3 URL
       uploadedFiles.push(uploadedFileUrl);

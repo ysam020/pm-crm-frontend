@@ -7,15 +7,15 @@
   --card-background: #fff;
   --card-background-secondary: #efefef;
   --event-strip-bg: #f9fafb;
-  --notes-bg: #fff;
+  --notes-bg: #fff8d2;
   --notes-color: #130d6b;
   --keys-color: #0a5faf;
   --text-color: #000;
   --link-color: #0060ae;
   --btn-bg: #111b21;
-  --notes-box-shadow: inset 0 -40px 40px rgba(80, 79, 79, 0.2),
-    inset 0 25px 10px rgba(174, 172, 172, 0.2),
-    0 5px 6px 5px rgba(73, 66, 66, 0.2);
+  --notes-box-shadow: inset 0 -40px 400px #fdef8e, inset 0 25px 100px #ecd15b,
+    0 5px 0px 0px #ffec7b;
+  --list-bg: #eef1ff;
 }
 
 #dark {
@@ -31,4 +31,5 @@
   --notes-box-shadow: inset 0 -40px 40px rgba(3, 3, 3, 0.2),
     inset 0 25px 10px rgba(0, 0, 0, 0.2), 0 5px 6px 5px rgba(0, 0, 0, 0.2);
   color: #888585;
+  --list-bg: #212e35;
 }

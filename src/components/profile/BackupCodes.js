@@ -1,26 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { AlertContext } from "../../contexts/AlertContext";
-import { Tooltip, IconButton } from "@mui/material";
-import "../../styles/backup-codes.scss";
-import { Divider } from "@mui/material";
+import { Tooltip, IconButton, Divider } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MailIcon from "@mui/icons-material/Mail";
+import "../../styles/backup-codes.scss";
 
 function BackupCodes() {
   const { user, setUser } = useContext(UserContext);
   const { setAlert } = useContext(AlertContext);
 
-  const splitCodesIntoPairs = (codes) =>
-    codes?.reduce((acc, curr, idx) => {
+  // Memoize the backup codes to prevent unnecessary recomputation
+  const codePairs = useMemo(() => {
+    return user.backupCodes?.reduce((acc, curr, idx) => {
       if (idx % 2 === 0) acc.push([curr]);
       else acc[acc.length - 1].push(curr);
       return acc;
     }, []);
-
-  const codePairs = splitCodesIntoPairs(user.backupCodes);
+  }, [user.backupCodes]);
 
   const handleAction = async (action, ...args) => {
     try {

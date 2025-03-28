@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useMemo } from "react";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { SwipeableDrawer } from "@mui/material";
@@ -6,23 +6,30 @@ const Sidebar = React.lazy(() => import("./Sidebar"));
 
 const drawerWidth = 60;
 
-const drawerPaperStyles = {
-  backgroundColor: "#111b21",
-  backgroundImage: `url(/assets/images/sidebar-bg.webp)`,
-  backgroundAttachment: "fixed",
-  backgroundPosition: "left 0 bottom 0 !important",
-  backgroundSize: "250px !important",
-  backgroundRepeat: "no-repeat",
-  padding: "0 10px",
-};
-const drawerStyles = {
-  "& .MuiDrawer-paper": {
-    boxSizing: "border-box",
-    width: drawerWidth,
-  },
-};
-
 function DrawerComponent(props) {
+  const drawerPaperStyles = useMemo(
+    () => ({
+      backgroundColor: "#111b21",
+      backgroundImage: `url(/assets/images/sidebar-bg.webp)`,
+      backgroundAttachment: "fixed",
+      backgroundPosition: "left 0 bottom 0 !important",
+      backgroundSize: "250px !important",
+      backgroundRepeat: "no-repeat",
+      padding: "0 10px",
+    }),
+    []
+  );
+
+  const drawerStyles = useMemo(
+    () => ({
+      "& .MuiDrawer-paper": {
+        boxSizing: "border-box",
+        width: drawerWidth,
+      },
+    }),
+    []
+  );
+
   return (
     <Box
       component="nav"

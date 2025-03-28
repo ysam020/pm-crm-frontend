@@ -21,21 +21,24 @@ function BroadcastModal(props) {
           window
         </h4>
         <br />
-        <button
-          className="btn"
-          onClick={() =>
-            (window.location.href = "https://cms.sameer-yadav.site")
-          }
-        >
-          Close
-        </button>
-        <button
-          className="btn"
-          onClick={props.handleUseInThisTab}
-          style={{ marginLeft: "10px" }}
-        >
-          Use here
-        </button>
+
+        <div className="flex-div">
+          <button
+            className="btn"
+            onClick={() =>
+              (window.location.href = "https://cms.sameer-yadav.site")
+            }
+          >
+            Close
+          </button>
+          <button
+            className="btn"
+            onClick={props.handleUseInThisTab}
+            style={{ marginLeft: "10px" }}
+          >
+            Use here
+          </button>
+        </div>
       </Box>
     </Modal>
   );

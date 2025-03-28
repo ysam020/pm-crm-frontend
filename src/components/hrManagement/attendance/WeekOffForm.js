@@ -6,6 +6,7 @@ import { validationSchema } from "../../../schemas/hrManagement/attendanceAndLea
 import ViewOwnWeekOffs from "./ViewOwnWeekOffs";
 import { AlertContext } from "../../../contexts/AlertContext";
 import apiClient from "../../../config/axiosConfig";
+import Grid from "@mui/material/Grid2";
 
 function WeekOffForm() {
   const [data, setData] = useState([]);
@@ -57,13 +58,17 @@ function WeekOffForm() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <CustomTextField
-        id="date"
-        name="date"
-        label="Date"
-        type="date"
-        formik={formik}
-      />
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 4, sm: 4, md: 4, lg: 4 }}>
+          <CustomTextField
+            id="date"
+            name="date"
+            label="Date"
+            type="date"
+            formik={formik}
+          />
+        </Grid>
+      </Grid>
 
       <CustomButton name="Submit" isSubmitting={formik.isSubmitting} />
       <br />
